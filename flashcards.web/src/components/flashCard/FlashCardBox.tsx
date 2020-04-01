@@ -21,7 +21,7 @@ const FlashCardBox: FunctionComponent<FlashCardBoxProps> = ({showAnswer, card}) 
                 responsive={false}
             >
                 {card ?
-                    
+
                     <Text size={"xlarge"}>{showAnswer ? card.backtext : card.fronttext}</Text>
                     : "Ingen kort i dette deck"
                 }
