@@ -2,16 +2,15 @@ import React, { Fragment, FunctionComponent, useEffect, useState } from 'react'
 import { RouteComponentProps, useHistory } from 'react-router-dom'
 import { Box, Button, Text } from "grommet";
 import { Trophy, FormNextLink } from 'grommet-icons'
-
-//MODELS
-import { CardRead } from '../models/cardModels/CardRead';
+import axios from '../axios';
 
 //COMPONENTS
 import FlashCardBox from '../components/flashCard/FlashCardBox';
 import ProgressButton from '../components/flashCard/ProgressButton';
+import Spinner from '../components/shared/loadingSpinnerLarge/Spinner';
 
-import axios from '../axios';
-
+//MODELS
+import Deck from "../models/deckModels/Deck";
 
 interface MatchParams {
     deckId: string
@@ -23,10 +22,11 @@ const FlashCardPage: FunctionComponent<AllProps> = ({match}) => {
 
     const [showAnswer, setShowAnswer] = useState(false);
     const [cardIndex, setCardIndex] = useState(0);
-    const [cardDeck, setCardDeck] = useState<CardRead[]>([]);
+    const [deck, setDeck] = useState<Deck | undefined>( undefined);
     const [loadingDeck, setLoadingDeck] = useState(false);
 
     const history = useHistory();
+    const { deckId } = match.params;
 
     const onCheckAnswer = () => {
         if(!showAnswer){
@@ -44,51 +44,47 @@ const FlashCardPage: FunctionComponent<AllProps> = ({match}) => {
     };
 
     useEffect(() => {
+        setLoadingDeck(true);
         // @ts-ignore
-        setCardDeck(dataArray)
-    },[]);
-
-     const dataArray = [
-        {
-            reverse: false,
-            front: {
-                text: "Hvem er du",
-                imageUrl: null
-            },
-            back: {
-                text: "min mor",
-                imageUrl: null
-            }
-         },
-         {
-             reverse: true,
-             front: {
-                 text: "Hvem er du",
-                 imageUrl: null
-             },
-             back: {
-                 text: "min mor",
-                 imageUrl: null
-             }
-         }
-     ];
+        if(deckId) {
+            axios.get(`deck/${deckId}`)
+                .then((response) => {
+                    const deck: Deck = response.data;
+                    console.log(response);
+                    const timer = setTimeout(() => {
+                        setDeck(deck);
+                        console.log(deck)
+                        setLoadingDeck(false);
+                    }, 2000);
+                    return () => clearTimeout(timer);
+                })
+        }},[deckId]);
 
     return (
         <Fragment>
-            {!loadingDeck && cardDeck &&
+            {!loadingDeck && deck &&
                 <Fragment>
-                    <FlashCardBox showAnswer={showAnswer} data={cardDeck[cardIndex]}/>
-                    {showAnswer && cardIndex !== dataArray.length - 1 &&
-                        <ProgressButton label={"Næste kort"} reverse onClick={onNextCard} icon={<FormNextLink/>}/>
+                    {deck.cardlist ?
+                        <Fragment>
+                            <FlashCardBox showAnswer={showAnswer} card={deck.cardlist[cardIndex]}/>
+                            {!showAnswer && deck.cardlist ?
+                                <ProgressButton label={"Check svar"} reverse onClick={onCheckAnswer} icon={<Trophy/>}/>
+                                : (cardIndex === deck.cardlist.length-1 ?
+                                <ProgressButton label={"Afslut"} reverse onClick={onEndQuiz} icon={<FormNextLink/>}/>
+                                :
+                                <ProgressButton label={"Næste kort"} reverse onClick={onNextCard} icon={<FormNextLink/>}/>
+                                )
+                            }
+                        </Fragment>
+                        :
+                        <FlashCardBox showAnswer={showAnswer}/>
                     }
-                    {!showAnswer &&
-                        <ProgressButton label={"Check svar"} reverse onClick={onCheckAnswer} icon={<Trophy/>}/>
-                    }
-                    {showAnswer && cardIndex === dataArray.length-1 &&
-                        <ProgressButton label={"Afslut"} reverse onClick={onEndQuiz} icon={<FormNextLink/>}/>
-                    }
+
                 </Fragment>
              }
+            {loadingDeck &&
+                <Spinner color={"#B3D0BF"}/>
+            }
         </Fragment>
     )
 };

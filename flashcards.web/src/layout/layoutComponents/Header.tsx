@@ -29,7 +29,7 @@ const Header = (props: any) => {
                     value={{ anchor: { color: {"dark": "light-1", "light": "dark-2"}, hover: {textDecoration: "none"} } }}
                 >
                     <Anchor onClick={onClick}>
-                        Persian flashcardssssdd
+                        Persian flashcards
                     </Anchor>
                 </ThemeContext.Extend>
             </Heading>

@@ -5,20 +5,20 @@ import {useHistory} from 'react-router-dom';
 import axios from '../axios';
 
 //MODELS
-import DeckRead from '../models/deckModels/DeckRead';
+import DeckPres from '../models/deckModels/DeckPres';
 
 import GridLayout from "../layout/layoutPages/GridLayout";
 import Spinner from '../components/shared/loadingSpinnerLarge/Spinner';
 
 const IndexPage: FunctionComponent = () => {
 
-    const [deckList, setDeckList] = useState<DeckRead[]>([]);
+    const [deckList, setDeckList] = useState<DeckPres[]>([]);
     const [loadingDeckList, setLoadingDeckList] = useState(false);
 
     const history = useHistory();
 
-    const onButtonClick = () => {
-        history.push("deck/1")
+    const onButtonClick = (id: string) => {
+        history.push("deck/" + id)
     };
 
     useEffect( () => {
@@ -46,7 +46,7 @@ const IndexPage: FunctionComponent = () => {
                             {deckList.map((deck, index) => {
                                 return (
                                     <Button
-                                        onClick={onButtonClick}
+                                        onClick={() => onButtonClick(deck.id)}
                                         label={deck.name}
                                         primary
                                         color={"primary"}

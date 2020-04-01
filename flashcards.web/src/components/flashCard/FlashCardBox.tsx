@@ -1,13 +1,13 @@
 import React, { FunctionComponent } from 'react';
 import { Box, Text } from "grommet";
-import { CardRead } from '../../models/cardModels/CardRead'
+import { Card } from '../../models/cardModels/Card'
 
 interface FlashCardBoxProps {
     showAnswer: boolean
-    data: CardRead
+    card?: Card
 }
 
-const FlashCardBox: FunctionComponent<FlashCardBoxProps> = ({showAnswer, data}) => {
+const FlashCardBox: FunctionComponent<FlashCardBoxProps> = ({showAnswer, card}) => {
     return (
         <div>
             <Box
@@ -20,9 +20,10 @@ const FlashCardBox: FunctionComponent<FlashCardBoxProps> = ({showAnswer, data}) 
                 width={"medium"}
                 responsive={false}
             >
-                {data ?
-                <Text>{showAnswer ? data.back.text : data.front.text}</Text>
-                    : null
+                {card ?
+                    
+                    <Text size={"xlarge"}>{showAnswer ? card.backtext : card.fronttext}</Text>
+                    : "Ingen kort i dette deck"
                 }
             </Box>
         </div>
