@@ -10,7 +10,7 @@ import DeckPres from "./models/deck/DeckPres";
 import Deck from "./models/deck/Deck";
 
 const server = express();
-const port: number = 5000;
+const port = process.env.PORT || 3000;
 server.use(cors());
 
 server.get('/deck', async (req, res) => {
@@ -29,6 +29,7 @@ server.get('/deck/:id', async (req, res) => {
 
 });
 
+// @ts-ignore
 server.listen(port, err => {
     if (err) {
         return console.error(err);
