@@ -19,18 +19,24 @@ server.get('/', (req, res) => {
 
 server.get('/deck', async (req, res) => {
     const deckList: DeckPres[] = await getAllDecks();
-    res.send(deckList);
+    try {
+        const deckList: DeckPres[] = await getAllDecks();
+        res.send(deckList);
+    } catch (e) {
+        res.send({e})
+    }
 });
 
 server.get('/deck/:id', async (req, res) => {
     const { id } = req.params;
-    const deckList: Deck[] = await getDeck(id);
-    if(deckList){
-        res.send(deckList[0])
-    } else {
-        res.send({})
+    try {
+        const deckList: Deck[] = await getDeck(id);
+        if(deckList){
+            res.send(deckList[0])
+        }
+    } catch (e) {
+        res.send({e})
     }
-
 });
 
 console.log(process.env.DATABASE_URL)
