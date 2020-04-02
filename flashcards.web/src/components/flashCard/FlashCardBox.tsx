@@ -13,7 +13,7 @@ const FlashCardBox: FunctionComponent<FlashCardBoxProps> = ({showAnswer, card}) 
     let primaryText;
     let secondaryText;
     if(card){
-        if(showAnswer){
+        if(!showAnswer){
             primaryText = card.primaryfronttext;
             secondaryText = card.secondaryfronttext;
         } else {
