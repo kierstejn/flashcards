@@ -8,6 +8,7 @@ import db from './data/db';
 //Models
 import DeckPres from "./models/deck/DeckPres";
 import Deck from "./models/deck/Deck";
+import fs from "fs";
 
 const server = express();
 const port = process.env.PORT || 3000;
@@ -39,7 +40,7 @@ server.get('/deck/:id', async (req, res) => {
     }
 });
 
-console.log(process.env.DATABASE_URL)
+
 
 // @ts-ignore
 server.listen(port, err => {
