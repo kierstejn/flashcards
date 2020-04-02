@@ -5,7 +5,7 @@ import {useHistory} from 'react-router-dom';
 import axios from '../axios';
 
 //MODELS
-import DeckPres from '../models/deckModels/DeckPres';
+import DeckPres from '../models/deck/DeckPres';
 
 import GridLayout from "../layout/layoutPages/GridLayout";
 import Spinner from '../components/shared/loadingSpinnerLarge/Spinner';
@@ -26,40 +26,40 @@ const IndexPage: FunctionComponent = () => {
         axios.get("deck")
             .then((response) => {
                 const deckList = response.data;
-                console.log(deckList);
-                console.log(response);
-                const timer = setTimeout(() => {
-                    setDeckList(deckList);
-                    setLoadingDeckList(false);
-                }, 2000);
-                return () => clearTimeout(timer);
+                setDeckList(deckList);
+                setLoadingDeckList(false);
+            })
+            .catch((err) => {
+                setLoadingDeckList(false);
             })
     }, []);
 
     // @ts-ignore
     return (
-        <GridLayout>
-            <ResponsiveContext.Consumer>
-                {responsive =>
-                    !loadingDeckList ?
-                        <Fragment>
-                            {deckList.map((deck, index) => {
-                                return (
-                                    <Button
-                                        onClick={() => onButtonClick(deck.id)}
-                                        label={deck.name}
-                                        primary
-                                        color={"primary"}
-                                        size={"large"}
-                                        margin={responsive === "small" ? "small" : "medium"}
-                                    />
-                                )
-                            })}
-                        </Fragment>
-                        :
-                        <Spinner color={"#B3D0BF"}/>
-                }
-            </ResponsiveContext.Consumer>
+        <GridLayout boxSize={"large"}>
+            <Box elevation='medium' gridArea={"main"} background={"light-3"} pad={"large"} justify={'center'}>
+                <ResponsiveContext.Consumer>
+                    {responsive =>
+                        !loadingDeckList ?
+                            <Fragment>
+                                {deckList.map((deck, index) => {
+                                    return (
+                                        <Button
+                                            onClick={() => onButtonClick(deck.id)}
+                                            label={deck.name}
+                                            primary
+                                            color={"primary"}
+                                            size={"large"}
+                                            margin={responsive === "small" ? "small" : "medium"}
+                                        />
+                                    )
+                                })}
+                            </Fragment>
+                            :
+                            <Spinner color={"#B3D0BF"}/>
+                    }
+                </ResponsiveContext.Consumer>
+            </Box>
         </GridLayout>
     );
 };

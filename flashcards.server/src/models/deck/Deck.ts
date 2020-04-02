@@ -4,7 +4,7 @@ import Card from "../card/Card";
 interface Deck {
     id: string;
     name: string;
-    cardlist: Card[];
+    cardList: Card[];
 }
 
 export default Deck;

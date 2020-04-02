@@ -14,11 +14,12 @@ export const getDeck = (id: string): Promise<Deck[]> => {
             "select array_to_json(array_agg(row_to_json(d))) " +
             "from " +
             "(" +
-                "select id, front_text as fronttext, back_text as backtext " +
+                "select id, primary_front_text as primaryFrontText, primary_back_text as primaryBackText, " +
+                "secondary_front_text as secondaryFrontText, secondary_back_text as secondaryBackText " +
                 "from card " +
                 "where deck_id=deck.id" +
             ") d" +
-            ") as cardlist " +
+            ") as cardList " +
             "from deck " +
             "where id = ?", [id]
         ).then((data) => {

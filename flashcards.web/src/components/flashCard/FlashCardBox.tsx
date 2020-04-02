@@ -1,6 +1,8 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, Fragment } from 'react';
 import { Box, Text } from "grommet";
-import { Card } from '../../models/cardModels/Card'
+import Card from '../../models/card/Card'
+import {isPersian} from "../../util/persianHelperMethods";
+import MultiLangText from "../shared/MultiLangText";
 
 interface FlashCardBoxProps {
     showAnswer: boolean
@@ -8,25 +10,37 @@ interface FlashCardBoxProps {
 }
 
 const FlashCardBox: FunctionComponent<FlashCardBoxProps> = ({showAnswer, card}) => {
+    let primaryText;
+    let secondaryText;
+    if(card){
+        if(showAnswer){
+            primaryText = card.primaryfronttext;
+            secondaryText = card.secondaryfronttext;
+        } else {
+            primaryText = card.primarybacktext;
+            secondaryText = card.secondarybacktext;
+        }
+    }
     return (
-        <div>
-            <Box
-                border={{ color: 'light-4', size: 'large' }}
-                pad="medium"
-                margin={"medium"}
-                basis={"medium"}
-                height={"medium"}
-                round={"medium"}
-                width={"medium"}
-                responsive={false}
-            >
-                {card ?
+        <Box
+            border={{ color: 'light-4', size: 'large' }}
+            pad={"medium"}
+            height={"medium"}
+            round={"medium"}
+            fill={"horizontal"}
+            responsive={false}
+            style={{marginBottom: 20}}
+            elevation='small'
+        >
+            {card ?
+                (<Fragment>
+                    <MultiLangText style={{marginBottom: 20}} size={"large"}>{primaryText}</MultiLangText>
+                    <MultiLangText size={"small"}>{secondaryText}</MultiLangText>
+                </Fragment>)
+                : "Ingen kort i dette deck"
+            }
 
-                    <Text size={"xlarge"}>{showAnswer ? card.backtext : card.fronttext}</Text>
-                    : "Ingen kort i dette deck"
-                }
-            </Box>
-        </div>
+        </Box>
     );
 };
 

@@ -1,4 +1,4 @@
-import {Card} from "../cardModels/Card";
+import Card from "../card/Card";
 
 interface Deck {
     id: string,

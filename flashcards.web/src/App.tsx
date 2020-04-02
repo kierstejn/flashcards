@@ -36,8 +36,8 @@ function App() {
     <BrowserRouter>
         <Grommet full className="App" theme={mergedTheme}>
             <Header/>
-            <Main direction='row' flex={"grow"} fill={"vertical"} overflow={{ horizontal: 'hidden'}}>
-                <Box flex align='center'  margin={"small"} style={{textAlign: "center"}}>
+            <Main direction='row' fill={"vertical"} overflow={{ horizontal: 'hidden'}}>
+                <Box flex align='center' style={{textAlign: "center"}}>
                     <Routes/>
                 </Box>
             </Main>
