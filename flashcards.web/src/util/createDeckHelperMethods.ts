@@ -2,7 +2,7 @@ import Deck from "../models/deck/Deck";
 import Card from "../models/card/Card";
 import UserCard from "../models/card/UserCard";
 import UserDeck from "../models/deck/UserDeck";
-import {dark} from "grommet";
+import { shuffle } from 'lodash';
 
 export const createDeck = (deck:Deck): UserDeck => {
     const newCardDeck:UserCard[] = [];
@@ -12,11 +12,22 @@ export const createDeck = (deck:Deck): UserDeck => {
                 newCardDeck.push({...deck.cardlist[i]});
             } else {
                 newCardDeck.push({...deck.cardlist[i]});
-                newCardDeck.push({...deck.cardlist[i]});
+                newCardDeck.push({...deck.cardlist[i],
+                    primaryfronttext: deck.cardlist[i].primarybacktext,
+                    primarybacktext: deck.cardlist[i].primaryfronttext,
+                    secondarybacktext: deck.cardlist[i].secondaryfronttext,
+                    secondaryfronttext: deck.cardlist[i].secondarybacktext
+                });
             }
         }
     }
-    const newUserDeck: UserDeck = {...deck, cardlist: newCardDeck};
+    const shuffledDeck: UserCard[] = shuffleDeck(newCardDeck);
+    const newUserDeck: UserDeck = {...deck, cardlist: shuffledDeck};
     console.log(newUserDeck);
     return newUserDeck;
 };
+
+export const shuffleDeck = (deck: UserCard[]): UserCard[] => {
+    const shuffledDeck: UserCard[] = shuffle(deck);
+    return shuffledDeck;
+}
