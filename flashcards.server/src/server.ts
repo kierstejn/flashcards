@@ -33,6 +33,8 @@ server.get('/deck/:id', async (req, res) => {
 
 });
 
+console.log(process.env.DATABASE_URL)
+
 // @ts-ignore
 server.listen(port, err => {
     if (err) {
