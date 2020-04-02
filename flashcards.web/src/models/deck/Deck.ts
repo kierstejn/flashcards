@@ -3,7 +3,7 @@ import Card from "../card/Card";
 interface Deck {
     id: string,
     name: string,
-    cardlist: Card[]
+    cardlist?: Card[]
 }
 
 export default Deck;

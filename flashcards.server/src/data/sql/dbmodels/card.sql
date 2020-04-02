@@ -5,6 +5,7 @@ CREATE TABLE card (
    primary_back_text varchar(100) NOT NULL,
    secondary_back_text varchar(100) NULL,
    deck_id uuid NOT NULL,
+   reversed BOOLEAN 0,
    CONSTRAINT PK_id PRIMARY KEY (id)
    CONSTRAINT FK_deck_id FOREIGN KEY (deck_id) REFERENCES card (id)
 );

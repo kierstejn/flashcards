@@ -2,7 +2,6 @@ import React, { Fragment, FunctionComponent, useEffect, useState } from 'react'
 import { RouteComponentProps, useHistory } from 'react-router-dom'
 import {Box, Button, Stack, Text} from "grommet";
 import { Trophy, FormNextLink } from 'grommet-icons'
-import axios from '../axios';
 
 //COMPONENTS
 import FlashCardBox from '../components/flashCard/FlashCardBox';
@@ -11,9 +10,15 @@ import Spinner from '../components/shared/loadingSpinnerLarge/Spinner';
 
 //MODELS
 import Deck from "../models/deck/Deck";
+import UserDeck from "../models/deck/UserDeck";
+
 
 //LAYOUT
 import GridLayout from "../layout/layoutPages/GridLayout";
+
+//UTIL
+import axios from '../axios';
+import {createDeck} from '../util/createDeckHelperMethods';
 
 interface MatchParams {
     deckId: string
@@ -25,7 +30,7 @@ const FlashCardPage: FunctionComponent<AllProps> = ({match}) => {
 
     const [showAnswer, setShowAnswer] = useState(false);
     const [cardIndex, setCardIndex] = useState(0);
-    const [deck, setDeck] = useState<Deck | undefined>( undefined);
+    const [deck, setDeck] = useState<UserDeck | undefined>( undefined);
     const [loadingDeck, setLoadingDeck] = useState(false);
 
     const history = useHistory();
@@ -53,7 +58,9 @@ const FlashCardPage: FunctionComponent<AllProps> = ({match}) => {
             axios.get(`deck/${deckId}`)
                 .then((response) => {
                     const deck: Deck = response.data;
-                    setDeck(deck);
+                    const userDeck: UserDeck = createDeck(deck);
+                    setDeck(userDeck);
+                    console.log(deck);
                     setLoadingDeck(false);
                 })
                 .catch(err => {
@@ -65,22 +72,24 @@ const FlashCardPage: FunctionComponent<AllProps> = ({match}) => {
         <GridLayout boxSize={"medium"}>
             {!loadingDeck && deck &&
                 <Fragment>
-                    {deck.cardlist ?
+
                         <Box direction={"column"}>
                             <FlashCardBox showAnswer={showAnswer} card={deck?.cardlist[cardIndex]}/>
-                            {!showAnswer && deck.cardlist ?
-                                <ProgressButton label={"Check svar"} reverse onClick={onCheckAnswer}/>
-                                : (cardIndex === deck.cardlist.length-1 ?
-                                <ProgressButton label={"Afslut"} reverse onClick={onEndQuiz} icon={<Trophy/>}/>
-                                :
-                                <ProgressButton label={"Næste kort"} reverse onClick={onNextCard} icon={<FormNextLink/>}/>
-                                )
+                            {deck.cardlist && deck.cardlist.length > 0 &&
+                            <Fragment>
+                                {!showAnswer ?
+                                    <ProgressButton label={"Check svar"} reverse onClick={onCheckAnswer}/>
+                                    : (cardIndex === deck.cardlist.length - 1 ?
+                                            <ProgressButton label={"Afslut"} reverse onClick={onEndQuiz}
+                                                            icon={<Trophy/>}/>
+                                            :
+                                            <ProgressButton label={"Næste kort"} reverse onClick={onNextCard}
+                                                            icon={<FormNextLink/>}/>
+                                    )
+                                }
+                            </Fragment>
                             }
                         </Box>
-                        :
-                        <FlashCardBox showAnswer={showAnswer}/>
-                    }
-
                 </Fragment>
              }
             {loadingDeck &&

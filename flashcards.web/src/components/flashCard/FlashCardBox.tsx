@@ -1,12 +1,12 @@
 import React, { FunctionComponent, Fragment } from 'react';
 import { Box, Text } from "grommet";
 import Card from '../../models/card/Card'
-import {isPersian} from "../../util/persianHelperMethods";
 import MultiLangText from "../shared/MultiLangText";
+import UserCard from "../../models/card/UserCard";
 
 interface FlashCardBoxProps {
     showAnswer: boolean
-    card?: Card
+    card?: UserCard
 }
 
 const FlashCardBox: FunctionComponent<FlashCardBoxProps> = ({showAnswer, card}) => {

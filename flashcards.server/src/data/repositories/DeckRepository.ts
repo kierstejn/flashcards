@@ -15,7 +15,7 @@ export const getDeck = (id: string): Promise<Deck[]> => {
             "from " +
             "(" +
                 "select id, primary_front_text as primaryFrontText, primary_back_text as primaryBackText, " +
-                "secondary_front_text as secondaryFrontText, secondary_back_text as secondaryBackText " +
+                "secondary_front_text as secondaryFrontText, secondary_back_text as secondaryBackText, reversed " +
                 "from card " +
                 "where deck_id=deck.id" +
             ") d" +

@@ -12,6 +12,7 @@ CREATE TABLE card (
    secondary_front_text varchar(100) NULL,
    primary_back_text varchar(100) NOT NULL,
    secondary_back_text varchar(100) NULL,
+   reversed BOOLEAN 0,
    deck_id uuid NOT NULL,
    CONSTRAINT PK_id PRIMARY KEY (id),
    CONSTRAINT FK_deck_id FOREIGN KEY (deck_id) REFERENCES deck (id) ON DELETE CASCADE
